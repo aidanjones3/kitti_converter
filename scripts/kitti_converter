@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from kitti_converter.kitti_converter import run_converter
+
+if __name__ == '__main__':
+    run_converter()
