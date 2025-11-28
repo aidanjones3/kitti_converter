@@ -14,6 +14,6 @@ setup(
     entry_points = {
         'console_scripts': ['kitti_converter=kitti_converter.__main__:main'],
     },
-    install_requires=['pykitti', 'progressbar2'],
+    install_requires=['pykitti', 'progressbar2', 'tqdm'],
     zip_safe=False,
 )

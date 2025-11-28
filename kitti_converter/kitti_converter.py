@@ -219,8 +219,7 @@ def save_camera_data(bag, kitti_type, kitti, util, bridge, camera, camera_frame_
         calib.p = util['P{}'.format(camera_pad)].flatten().tolist()
     
     iterable = zip(image_datetimes, image_filenames)
-    bar = progressbar.ProgressBar()
-    for dt, filename in bar(iterable):
+    for dt, filename in tqdm(iterable, total=len(image_filenames)):
         image_filename = os.path.join(image_path, filename)
         cv_image = cv2.imread(image_filename)
         calib.height, calib.width = cv_image.shape[:2]
@@ -254,8 +253,7 @@ def save_velo_data(bag, kitti, velo_frame_id, topic):
             velo_datetimes.append(dt)
 
     iterable = zip(velo_datetimes, velo_filenames)
-    bar = progressbar.ProgressBar()
-    for dt, filename in bar(iterable):
+    for dt, filename in tqdm(iterable, total=len(velo_filenames)):
         if dt is None:
             continue
 
@@ -289,7 +287,8 @@ def save_velo_data(bag, kitti, velo_frame_id, topic):
         fields = [PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
                   PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
                   PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
-                  PointField(name='i', offset=12, datatype=PointField.FLOAT32, count=1)]
+                  PointField(name='intensity', offset=12, datatype=PointField.FLOAT32, count=1),
+                  PointField(name='ring', offset=16, datatype=PointField.UINT16, count=1)]
         pcl_msg = pcl2.create_cloud(header, fields, scan)
 
         bag.write(topic + '/pointcloud', pcl_msg, t=pcl_msg.header.stamp)
